@@ -1,8 +1,9 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { Card, Image, Button, CheckBox } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { MonoText } from '../components/StyledText';
 
 export default function PreferenceList() {
@@ -15,6 +16,36 @@ export default function PreferenceList() {
             testing first page
           </Text>
         </View>
+
+        <Card containerStyle={styles.cardWrapper}>
+          <Card containerStyle={styles.card}>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={styles.notes}>oprimeiro</Text>
+              <Image style={{ width: 100, height: 100, marginBottom: 10 }} source={{ uri: "https://super.abril.com.br/wp-content/uploads/2016/10/super_imgde_onde_veio_a_expressao_bode_expiatorio.jpg?quality=70&strip=info&resize=680,453" }} />
+              <Button
+                buttonStyle={styles.arrowButton}
+                icon={
+                  <Icon
+                    name="arrow-down"
+                    size={30}
+                    color="white"
+                  />
+                }
+              />
+            </View>
+          </Card>
+          <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(56, 172, 236, 1)' }}>
+              <CheckBox title='Click Hereadsdasdasadsads' />
+              <CheckBox title='Click Hereadsdasdasadsads' />
+              <CheckBox title='Click Hereadsdasdasadsads' />
+              <CheckBox title='Click Hereadsdasdasadsads' />
+              <CheckBox title='Click Hereadsdasdasadsads' />
+              <CheckBox title='Click Hereadsdasdasadsads' />
+              <CheckBox title='Click Hereadsdasdasadsads' />
+            </View>
+          </View>
+        </Card>
 
       </ScrollView>
 
@@ -120,4 +151,28 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  card: {
+    backgroundColor: 'rgba(56, 172, 236, 1)',
+    borderWidth: 0,
+    borderRadius: 10
+  },
+  cardWrapper: {
+    backgroundColor: 'white',
+    borderWidth: 0,
+    borderRadius: 10,
+    boxShadow: '0, 0, 0, 0'
+  },
+  time: {
+    fontSize: 38,
+    color: '#fff'
+  },
+  notes: {
+    fontSize: 18,
+    color: '#fff',
+    textTransform: 'capitalize',
+    marginBottom: 10
+  },
+  arrowButton: {
+    backgroundColor: 'rgba(56, 172, 236, 1)'
+  }
 });
