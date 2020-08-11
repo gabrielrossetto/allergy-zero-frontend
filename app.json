@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "allergy-zero",
-    "slug": "allergy-zero",
+    "name": "allergy-zero-frontend",
+    "slug": "allergy-zero-frontend",
     "platforms": [
       "ios",
       "android",

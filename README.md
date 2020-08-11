@@ -1,2 +1,1 @@
-# allergy-zero
-
+# allergy-zero-frontend
