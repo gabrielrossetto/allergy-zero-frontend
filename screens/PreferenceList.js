@@ -7,6 +7,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { MonoText } from '../components/StyledText';
 
 export default function PreferenceList() {
+
+  // const click = async () => {
+  //   console.log('asddsasda');
+  //   const response = await fetch('http://localhost:5000/api/mensagem');
+  //   const body = await response.json();
+  //   if (response.status !== 200) throw Error(body.message);
+  //   return body;
+  // };
+
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -45,6 +55,7 @@ export default function PreferenceList() {
               <CheckBox title='Click Hereadsdasdasadsads' />
             </View>
           </View>
+          {/* <Button onPress={click}>adsadsdsdassaddsa</Button> */}
         </Card>
 
       </ScrollView>
