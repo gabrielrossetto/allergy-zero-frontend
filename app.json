@@ -1,19 +1,19 @@
 {
   "expo": {
-    "name": "allergy-zero-frontend",
-    "slug": "allergy-zero-frontend",
+    "name": "Argon FREE React Native",
+    "slug": "argon-free-react-native",
+    "privacy": "public",
+    "sdkVersion": "37.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
-    "version": "1.0.0",
+    "version": "1.5.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -25,8 +25,6 @@
     "ios": {
       "supportsTablet": true
     },
-    "web": {
-      "favicon": "./assets/images/favicon.png"
-    }
+    "description": "Argon React Native, based on Argon Design System. Coded by Creative Tim"
   }
 }

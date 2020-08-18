@@ -1,36 +1,121 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import React, {useState} from "react";
+import { Image } from "react-native";
+import { AppLoading } from "expo";
+import { useFonts } from '@use-expo/font';
+import { Asset } from "expo-asset";
+import { Block, GalioProvider } from "galio-framework";
+import { NavigationContainer } from "@react-navigation/native";
 
-import useCachedResources from './hooks/useCachedResources';
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import LinkingConfiguration from './navigation/LinkingConfiguration';
+// Before rendering any navigation stack
+import { enableScreens } from "react-native-screens";
+enableScreens();
 
-const Stack = createStackNavigator();
+import Screens from "./navigation/Screens";
+import { Images, articles, argonTheme } from "./constants";
 
-export default function App(props) {
-  const isLoadingComplete = useCachedResources();
+// cache app images
+const assetImages = [
+  Images.Onboarding,
+  Images.LogoOnboarding,
+  Images.Logo,
+  Images.Pro,
+  Images.ArgonLogo,
+  Images.iOSLogo,
+  Images.androidLogo
+];
 
-  if (!isLoadingComplete) {
-    return null;
-  } else {
+// cache product images
+articles.map(article => assetImages.push(article.image));
+
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === "string") {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
+export default props => {
+  const [isLoadingComplete, setLoading] = useState(false);
+  let [fontsLoaded] = useFonts({
+    'ArgonExtra': require('./assets/font/argon.ttf'),
+  });
+
+  function _loadResourcesAsync() {
+    return Promise.all([...cacheImages(assetImages)]);
+  }
+
+  function _handleLoadingError(error) {
+    // In this case, you might want to report the error to your error
+    // reporting service, for example Sentry
+    console.warn(error);
+  };
+
+ function _handleFinishLoading() {
+    setLoading(true);
+  };
+
+  if(!fontsLoaded && !isLoadingComplete) {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-        <NavigationContainer linking={LinkingConfiguration}>
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <AppLoading
+        startAsync={_loadResourcesAsync}
+        onError={_handleLoadingError}
+        onFinish={_handleFinishLoading}
+      />
+    );
+  } else if(fontsLoaded) {
+    return (
+      <NavigationContainer>
+        <GalioProvider theme={argonTheme}>
+          <Block flex>
+            <Screens />
+          </Block>
+        </GalioProvider>
+      </NavigationContainer>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+// export default class App extends React.Component {
+//   state = {
+//     isLoadingComplete: false
+//   };
+
+//   render() {
+//     if (!this.state.isLoadingComplete) {
+//       return (
+//         <AppLoading
+//           startAsync={this._loadResourcesAsync}
+//           onError={this._handleLoadingError}
+//           onFinish={this._handleFinishLoading}
+//         />
+//       );
+//     } else {
+//       return (
+//         <NavigationContainer>
+//           <GalioProvider theme={argonTheme}>
+//             <Block flex>
+//               <Screens />
+//             </Block>
+//           </GalioProvider>
+//         </NavigationContainer>
+//       );
+//     }
+//   }
+
+//   _loadResourcesAsync = async () => {
+//     return Promise.all([...cacheImages(assetImages)]);
+//   };
+
+//   _handleLoadingError = error => {
+//     // In this case, you might want to report the error to your error
+//     // reporting service, for example Sentry
+//     console.warn(error);
+//   };
+
+//   _handleFinishLoading = () => {
+//     this.setState({ isLoadingComplete: true });
+//   };
+// }
