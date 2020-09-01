@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions, FlatList, Animated } from 'react-native';
 import { Block, theme } from 'galio-framework';
 
 const { width } = Dimensions.get('screen');
-import argonTheme from '../constants/Theme';
+import materialTheme from '../constants/Theme';
 
 const defaultMenu = [
   { id: 'popular', title: 'Popular', },
@@ -12,7 +12,7 @@ const defaultMenu = [
   { id: 'motocycles', title: 'Motocycles', },
 ];
 
-export default class Tabs extends React.Component {
+export default class MenuHorizontal extends React.Component {
   static defaultProps = {
     data: defaultMenu,
     initialIndex: null,
@@ -65,18 +65,18 @@ export default class Tabs extends React.Component {
 
     const textColor = this.animatedValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [argonTheme.COLORS.BLACK, isActive ? argonTheme.COLORS.WHITE : argonTheme.COLORS.BLACK],
+      outputRange: [materialTheme.COLORS.MUTED, isActive ? materialTheme.COLORS.ACTIVE : materialTheme.COLORS.MUTED],
       extrapolate: 'clamp',
     });
     
-    const containerStyles = [
-      styles.titleContainer,
-      !isActive && { backgroundColor: argonTheme.COLORS.SECONDARY },
-      isActive && styles.containerShadow
-    ];
+    const width = this.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0%', isActive ? '100%' : '0%'],
+      extrapolate: 'clamp',
+    });
 
     return (
-      <Block style={containerStyles}>
+      <Block style={styles.titleContainer}>
         <Animated.Text
           style={[
             styles.menuTitle,
@@ -85,6 +85,7 @@ export default class Tabs extends React.Component {
           onPress={() => this.selectMenu(item.id)}>
           {item.title}
         </Animated.Text>
+        <Animated.View style={{ height: 2, width, backgroundColor: materialTheme.COLORS.ACTIVE }} />
       </Block>
     )
   }
@@ -110,7 +111,7 @@ export default class Tabs extends React.Component {
 
   render() {
     return (
-      <Block style={styles.container}>
+      <Block style={[styles.container, styles.shadow]}>
         {this.renderMenu()}
       </Block>
     )
@@ -133,27 +134,17 @@ const styles = StyleSheet.create({
   menu: {
     paddingHorizontal: theme.SIZES.BASE * 2.5,
     paddingTop: 8,
-    paddingBottom: 16,
+    paddingBottom: 0,
   },
   titleContainer: {
     alignItems: 'center',
-    backgroundColor: argonTheme.COLORS.ACTIVE,
-    borderRadius: 4,
-    marginRight: 9
-  },
-  containerShadow: {
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    shadowOpacity: 0.1,
-    elevation: 1,
   },
   menuTitle: {
-    fontWeight: '600',
-    fontSize: 14,
-    // lineHeight: 28,
-    paddingVertical: 10,
+    fontWeight: '300',
+    fontSize: 16,
+    lineHeight: 28,
+    // paddingBottom: 8,
     paddingHorizontal: 16,
-    color: argonTheme.COLORS.MUTED
+    color: materialTheme.COLORS.MUTED
   },
 });
