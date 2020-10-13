@@ -28,7 +28,6 @@ async function uploadImageAsync(uri) {
       resolve(xhr.response);
     };
     xhr.onerror = function (e) {
-      console.log(e);
       reject(new TypeError('Network request failed'));
     };
     xhr.responseType = 'blob';
@@ -50,7 +49,7 @@ class Profile extends Component {
   state = {
     image: null,
     uploading: false,
-    googleResponse: null
+    googleResponse: null,
   };
 
   async componentDidMount() {
@@ -193,7 +192,6 @@ class Profile extends Component {
         this.setState({ image: uploadUrl });
       }
     } catch (e) {
-      console.log(e);
       alert('Upload failed, sorry :(');
     } finally {
       this.setState({ uploading: false });
@@ -240,15 +238,48 @@ class Profile extends Component {
         }
       );
       let responseJson = await response.json();
-      console.log(responseJson);
       this.setState({
         googleResponse: responseJson,
         uploading: false
       });
+      this._maybeRenderFirstItemFound();
     } catch (error) {
       console.log(error);
     }
   };
+
+  _getProduct = async (products) => {
+    let { googleResponse } = this.state;
+
+    let found = products.docs.find(currentDb => googleResponse.responses[0].logoAnnotations[0].description.toUpperCase() === currentDb.data().description.toUpperCase())
+    return found.data();
+  };
+
+  _maybeRenderFirstItemFound = async () => {
+    let { image } = this.state;
+    let products = await firebase.firestore().collection('products').get();
+
+    var a = await this._getProduct(products);
+    console.log(a)
+
+    if (!image) {
+      return;
+    }
+
+    return (
+      <View
+        style={{
+          marginTop: 20,
+          width: 250,
+          borderRadius: 3,
+          elevation: 2
+        }}
+      >
+
+      </View>
+    );
+  }
+
 
   render() {
     let { image } = this.state;
@@ -284,18 +315,7 @@ class Profile extends Component {
               color="#1985bc"
             />
 
-            {this.state.googleResponse && (
-              <FlatList
-                data={this.state.googleResponse.responses[0].logoAnnotations}
-                extraData={this.state}
-                keyExtractor={this._keyExtractor}
-                renderItem={({ item }) => (
-                  <Text style={styles.logoText}>
-                    Logo Detected: {item.description}
-                  </Text>
-                )}
-              />
-            )}
+            {/* <Image source={{ uri: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" }} style={{ width: 250, height: 250 }} /> */}
 
             {this._maybeRenderImage()}
             {this._maybeRenderUploadingOverlay()}
