@@ -16,7 +16,7 @@ import {
 import { Button, Text, theme, Block } from 'galio-framework';
 
 import { Product } from '../components/';
-import { materialTheme, Images, products } from '../constants/';
+import { materialTheme } from '../constants/';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -57,7 +57,8 @@ class Profile extends Component {
     image: null,
     uploading: false,
     googleResponse: null,
-    product: null
+    product: null,
+    productFoundError: false
   };
 
   async componentDidMount() {
@@ -198,9 +199,12 @@ class Profile extends Component {
 
   _getProduct = async (products) => {
     let { googleResponse } = this.state;
-
     let found = products.docs.find(currentDb => googleResponse.responses[0].logoAnnotations[0].description.toUpperCase() === currentDb.data().description.toUpperCase())
-    return found.data();
+
+    if (found) {
+      return found.data();
+    }
+    return;
   };
 
   _maybeRenderFirstItemFound = async () => {
@@ -209,11 +213,23 @@ class Profile extends Component {
 
     if (productFound) {
       this.setState({ product: productFound });
+    } else {
+      this.setState({ productFoundError: true });
     }
   }
 
+  _tryAgain = async () => {
+    this.setState({
+      image: null,
+      uploading: false,
+      googleResponse: null,
+      product: null,
+      productFoundError: false
+    })
+  }
+
   render() {
-    let { image, product, googleResponse } = this.state;
+    let { image, product, googleResponse, productFoundError } = this.state;
 
     return (
       <View style={styles.container}>
@@ -222,31 +238,28 @@ class Profile extends Component {
           {!image && (
             <>
               <View style={{ margin: 20 }}>
-                {/* refatorar nomes com imagem */}
                 <Button
                   style={[styles.button, styles.shadow]}
+                  onPress={this._takePhoto}
                   color={materialTheme.COLORS.BUTTON_COLOR}
-                  onPress={this._pickImage}>
-                  galeria
+                >
+                  Abrir câmera
                 </Button>
               </View>
 
               <View style={{ margin: 20 }}>
                 <Button
                   style={[styles.button, styles.shadow]}
-                  onPress={this._takePhoto}
                   color={materialTheme.COLORS.BUTTON_COLOR}
-                >
-                  foto
+                  onPress={this._pickImage}>
+                  Carregar foto da galeria
                 </Button>
               </View>
-
-
             </>
           )}
 
           <View style={{ margin: 20 }}>
-            {!googleResponse && image && (
+            {!googleResponse && !productFoundError && image && (
               <>
                 <Button
                   style={[styles.button, styles.shadow]}
@@ -257,15 +270,26 @@ class Profile extends Component {
                 </Button>
               </>
             )}
-            {image && (
+            {image && !productFoundError && (
               <Block flex style={styles.group}>
-                {/* <Text bold size={16} style={styles.title}>Produto</Text> */}
                 <Block flex>
                   <Block>
-                    <Product product={products[4]} full />
+                    <Product product={image} full />
                   </Block>
                 </Block>
               </Block>
+            )}
+            {productFoundError && (
+              <>
+                <Text bold size={16} style={styles.title}>Erro ao analisar a imagem</Text>
+
+                <Button
+                  style={[styles.button, styles.shadow]}
+                  color={materialTheme.COLORS.BUTTON_COLOR}
+                  onPress={this._tryAgain}>
+                  Tente novamente
+                </Button>
+              </>
             )}
             {/* {this._maybeRenderUploadingOverlay()} */}
           </View>
@@ -428,5 +452,5 @@ const styles = StyleSheet.create({
     height: thumbMeasure
   },
   components: {
-  }
+  },
 });
