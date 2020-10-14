@@ -258,9 +258,16 @@ class Profile extends Component {
               </>
             )}
             {image && (
-              <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+              <Block flex style={styles.group}>
+                {/* <Text bold size={16} style={styles.title}>Produto</Text> */}
+                <Block flex>
+                  <Block>
+                    <Product product={products[4]} full />
+                  </Block>
+                </Block>
+              </Block>
             )}
-            {this._maybeRenderUploadingOverlay()}
+            {/* {this._maybeRenderUploadingOverlay()} */}
           </View>
 
         </ScrollView>

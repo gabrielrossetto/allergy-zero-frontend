@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 3,
-    marginHorizontal: theme.SIZES.BASE / 2,
-    marginTop: -16,
+    marginHorizontal: theme.SIZES.BASE / 4,
+    marginTop: -40,
   },
   horizontalImage: {
     height: 122,
