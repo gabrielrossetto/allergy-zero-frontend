@@ -65,11 +65,6 @@ class Profile extends Component {
     await Permissions.askAsync(Permissions.CAMERA);
   }
 
-  // test = async () => {
-  //   const products = await firebase.firestore().collection('products').get();
-  //   console.log(products.docs.map(doc => doc.data()));
-  // };
-
   organize = array => {
     return array.map(function (item, i) {
       return (
@@ -97,32 +92,6 @@ class Profile extends Component {
         </View>
       );
     }
-  };
-
-  _maybeRenderImageToAnalyze = () => {
-    let { image, googleResponse } = this.state;
-    if (!image) {
-      return;
-    }
-
-    return (
-      <>
-        {!googleResponse && (
-          <>
-            <Button
-              style={[styles.button, styles.shadow]}
-              onPress={this._submitToGoogle}
-              color={materialTheme.COLORS.BUTTON_COLOR}
-            >
-              Analyze!
-            </Button>
-
-            <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
-
-          </>
-        )}
-      </>
-    );
   };
 
   _keyExtractor = (item, index) => item.description;
@@ -244,7 +213,7 @@ class Profile extends Component {
   }
 
   render() {
-    let { image, product } = this.state;
+    let { image, product, googleResponse } = this.state;
 
     return (
       <View style={styles.container}>
@@ -277,13 +246,22 @@ class Profile extends Component {
           )}
 
           <View style={{ margin: 20 }}>
-            {this._maybeRenderImageToAnalyze()}
+            {!googleResponse && image && (
+              <>
+                <Button
+                  style={[styles.button, styles.shadow]}
+                  onPress={this._submitToGoogle}
+                  color={materialTheme.COLORS.BUTTON_COLOR}
+                >
+                  Analyze!
+                </Button>
+              </>
+            )}
+            {image && (
+              <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+            )}
             {this._maybeRenderUploadingOverlay()}
           </View>
-
-          {product && (
-            <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
-          )}
 
         </ScrollView>
       </View>
