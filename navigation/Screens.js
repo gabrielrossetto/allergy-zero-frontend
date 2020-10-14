@@ -97,23 +97,11 @@ function HomeStack(props) {
         options={{
           header: ({ navigation, scene }) => (
             <Header
-              search
-              tabs
               title="Home"
               navigation={navigation}
               scene={scene}
             />
           )
-        }}
-      />
-      <Stack.Screen
-        name="Pro"
-        component={ProScreen}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header back white transparent title="" navigation={navigation} scene={scene} />
-          ),
-          headerTransparent: true
         }}
       />
     </Stack.Navigator>

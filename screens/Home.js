@@ -3,16 +3,23 @@ import 'react-native-get-random-values';
 import { uuid } from '../utils/helpers';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  Button,
   Share,
-  FlatList,
   Clipboard,
-  Image
+  Image,
+  Dimensions,
+  ImageBackground
 } from 'react-native';
+
+import { Button, Text, theme, Block } from 'galio-framework';
+
+import { Product } from '../components/';
+import { materialTheme, Images, products } from '../constants/';
+
+const { width } = Dimensions.get('screen');
+const thumbMeasure = (width - 48 - 32) / 3;
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -50,6 +57,7 @@ class Profile extends Component {
     image: null,
     uploading: false,
     googleResponse: null,
+    product: null
   };
 
   async componentDidMount() {
@@ -57,10 +65,10 @@ class Profile extends Component {
     await Permissions.askAsync(Permissions.CAMERA);
   }
 
-  test = async () => {
-    const products = await firebase.firestore().collection('products').get();
-    console.log(products.docs.map(doc => doc.data()));
-  };
+  // test = async () => {
+  //   const products = await firebase.firestore().collection('products').get();
+  //   console.log(products.docs.map(doc => doc.data()));
+  // };
 
   organize = array => {
     return array.map(function (item, i) {
@@ -91,13 +99,14 @@ class Profile extends Component {
     }
   };
 
-  _maybeRenderImage = () => {
+  _maybeRenderImageToAnalyze = () => {
     let { image, googleResponse } = this.state;
     if (!image) {
       return;
     }
 
     return (
+
       <View
         style={{
           marginTop: 20,
@@ -106,41 +115,29 @@ class Profile extends Component {
           elevation: 2
         }}
       >
-        <Button
-          style={{ marginBottom: 10 }}
-          onPress={() => this.submitToGoogle()}
-          title="Analyze!"
-        />
-
-        <View
-          style={{
-            borderTopRightRadius: 3,
-            borderTopLeftRadius: 3,
-            shadowColor: 'rgba(0,0,0,1)',
-            shadowOpacity: 0.2,
-            shadowOffset: { width: 4, height: 4 },
-            shadowRadius: 5,
-            overflow: 'hidden'
-          }}
-        >
-          <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
-        </View>
-        <Text
-          onPress={this._copyToClipboard}
-          onLongPress={this._share}
-          style={{ paddingVertical: 10, paddingHorizontal: 10 }}
-        />
-
-        <Text>Raw JSON:</Text>
-
-        {googleResponse && (
-          <Text
-            onPress={this._copyToClipboard}
-            onLongPress={this._share}
-            style={{ paddingVertical: 10, paddingHorizontal: 10 }}
-          >
-            {JSON.stringify(googleResponse.responses)}
-          </Text>
+        {!googleResponse && (
+          <>
+            <Button
+              style={[styles.button, styles.shadow]}
+              onPress={this._submitToGoogle}
+              color={materialTheme.COLORS.BUTTON_COLOR}
+            >
+              Analyze!
+        </Button>
+            <View
+              style={{
+                borderTopRightRadius: 3,
+                borderTopLeftRadius: 3,
+                shadowColor: 'rgba(0,0,0,1)',
+                shadowOpacity: 0.2,
+                shadowOffset: { width: 4, height: 4 },
+                shadowRadius: 5,
+                overflow: 'hidden'
+              }}
+            >
+              <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+            </View>
+          </>
         )}
       </View>
     );
@@ -198,7 +195,7 @@ class Profile extends Component {
     }
   };
 
-  submitToGoogle = async () => {
+  _submitToGoogle = async () => {
     try {
       this.setState({ uploading: true });
       let { image } = this.state;
@@ -256,70 +253,49 @@ class Profile extends Component {
   };
 
   _maybeRenderFirstItemFound = async () => {
-    let { image } = this.state;
     let products = await firebase.firestore().collection('products').get();
+    var productFound = await this._getProduct(products);
 
-    var a = await this._getProduct(products);
-    console.log(a)
-
-    if (!image) {
-      return;
+    if (productFound) {
+      this.setState({ product: productFound });
     }
-
-    return (
-      <View
-        style={{
-          marginTop: 20,
-          width: 250,
-          borderRadius: 3,
-          elevation: 2
-        }}
-      >
-
-      </View>
-    );
   }
 
-
   render() {
-    let { image } = this.state;
+    let { image, product } = this.state;
 
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          <View style={styles.getStartedContainer}>
-            {image ? null : (
-              <Text style={styles.getStartedText}>Logo Detection App</Text>
-            )}
-          </View>
+          <View style={{ margin: 20 }}>
 
-          <View style={styles.helpContainer}>
-            <View style={{ margin: 20 }}>
-              <Button
-                onPress={this._pickImage}
-                title="Pick an image from camera roll"
-                color="#3b5998"
-              />
-            </View>
-            <View style={{ margin: 20 }}>
-              <Button
-                onPress={this._takePhoto}
-                title="Click a photo"
-                color="#1985bc"
-              />
-            </View>
-
+            {/* refatorar nomes com imagem */}
             <Button
-              onPress={this.test}
-              title="Test"
-              color="#1985bc"
-            />
+              style={[styles.button, styles.shadow]}
+              color={materialTheme.COLORS.BUTTON_COLOR}
+              onPress={this._pickImage}>
+              galeria
+            </Button>
 
-            {/* <Image source={{ uri: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" }} style={{ width: 250, height: 250 }} /> */}
-
-            {this._maybeRenderImage()}
-            {this._maybeRenderUploadingOverlay()}
           </View>
+          <View style={{ margin: 20 }}>
+            <Button
+              style={[styles.button, styles.shadow]}
+              onPress={this._takePhoto}
+              color={materialTheme.COLORS.BUTTON_COLOR}
+            >
+              foto
+            </Button>
+          </View>
+
+          {this._maybeRenderImageToAnalyze()}
+          {this._maybeRenderUploadingOverlay()}
+
+
+          {product && (
+            <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+          )}
+
         </ScrollView>
       </View>
     );
@@ -362,9 +338,121 @@ const styles = StyleSheet.create({
     marginTop: 15,
     alignItems: 'center'
   },
-
   logoText: {
     fontSize: 20,
     fontWeight: '600'
+  },
+  group: {
+    paddingTop: theme.SIZES.BASE * 3.75,
+  },
+  imageBlock: {
+    overflow: 'hidden',
+    borderRadius: 4,
+  },
+  rows: {
+    height: theme.SIZES.BASE * 2,
+  },
+  social: {
+    width: theme.SIZES.BASE * 3.5,
+    height: theme.SIZES.BASE * 3.5,
+    borderRadius: theme.SIZES.BASE * 1.75,
+    justifyContent: 'center',
+  },
+  category: {
+    backgroundColor: theme.COLORS.WHITE,
+    marginVertical: theme.SIZES.BASE / 2,
+    borderWidth: 0,
+  },
+  categoryTitle: {
+    height: '100%',
+    paddingHorizontal: theme.SIZES.BASE,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  group: {
+    paddingTop: theme.SIZES.BASE * 3.75,
+  },
+  shadow: {
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    shadowOpacity: 0.2,
+    elevation: 2,
+  },
+  button: {
+    marginBottom: theme.SIZES.BASE,
+    width: width - (theme.SIZES.BASE * 2),
+  },
+  optionsText: {
+    fontSize: theme.SIZES.BASE * 0.75,
+    color: '#4A4A4A',
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: -0.29,
+  },
+  optionsButton: {
+    width: 'auto',
+    height: 34,
+    paddingHorizontal: theme.SIZES.BASE,
+    paddingVertical: 10,
+  },
+  input: {
+    borderBottomWidth: 1,
+  },
+  inputDefault: {
+    borderBottomColor: materialTheme.COLORS.PLACEHOLDER,
+  },
+  inputTheme: {
+    borderBottomColor: materialTheme.COLORS.PRIMARY,
+  },
+  inputTheme: {
+    borderBottomColor: materialTheme.COLORS.PRIMARY,
+  },
+  inputInfo: {
+    borderBottomColor: materialTheme.COLORS.INFO,
+  },
+  inputSuccess: {
+    borderBottomColor: materialTheme.COLORS.SUCCESS,
+  },
+  inputWarning: {
+    borderBottomColor: materialTheme.COLORS.WARNING,
+  },
+  inputDanger: {
+    borderBottomColor: materialTheme.COLORS.ERROR,
+  },
+  imageBlock: {
+    overflow: 'hidden',
+    borderRadius: 4,
+  },
+  rows: {
+    height: theme.SIZES.BASE * 2,
+  },
+  social: {
+    width: theme.SIZES.BASE * 3.5,
+    height: theme.SIZES.BASE * 3.5,
+    borderRadius: theme.SIZES.BASE * 1.75,
+    justifyContent: 'center',
+  },
+  category: {
+    backgroundColor: theme.COLORS.WHITE,
+    marginVertical: theme.SIZES.BASE / 2,
+    borderWidth: 0,
+  },
+  categoryTitle: {
+    height: '100%',
+    paddingHorizontal: theme.SIZES.BASE,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  albumThumb: {
+    borderRadius: 4,
+    marginVertical: 4,
+    alignSelf: 'center',
+    width: thumbMeasure,
+    height: thumbMeasure
+  },
+  components: {
   }
 });
