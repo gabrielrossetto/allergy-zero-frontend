@@ -8,9 +8,7 @@ import {
   ActivityIndicator,
   Share,
   Clipboard,
-  Image,
   Dimensions,
-  ImageBackground
 } from 'react-native';
 
 import { Button, Text, theme, Block } from 'galio-framework';
@@ -19,7 +17,6 @@ import { Product } from '../components/';
 import { materialTheme } from '../constants/';
 
 const { width } = Dimensions.get('screen');
-const thumbMeasure = (width - 48 - 32) / 3;
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -52,7 +49,7 @@ async function uploadImageAsync(uri) {
   return await snapshot.ref.getDownloadURL();
 }
 
-class Profile extends Component {
+class Home extends Component {
   state = {
     image: null,
     uploading: false,
@@ -66,17 +63,8 @@ class Profile extends Component {
     await Permissions.askAsync(Permissions.CAMERA);
   }
 
-  organize = array => {
-    return array.map(function (item, i) {
-      return (
-        <View key={i}>
-          <Text>{item}</Text>
-        </View>
-      );
-    });
-  };
-
   _maybeRenderUploadingOverlay = () => {
+    // refactor
     if (this.state.uploading) {
       return (
         <View
@@ -93,25 +81,6 @@ class Profile extends Component {
         </View>
       );
     }
-  };
-
-  _keyExtractor = (item, index) => item.description;
-
-  _renderItem = item => {
-    <Text>response: {JSON.stringify(item)}</Text>;
-  };
-
-  _share = () => {
-    Share.share({
-      message: JSON.stringify(this.state.googleResponse.responses),
-      title: 'Check it out',
-      url: this.state.image
-    });
-  };
-
-  _copyToClipboard = () => {
-    Clipboard.setString(this.state.image);
-    alert('Copied to clipboard');
   };
 
   _takePhoto = async () => {
@@ -300,7 +269,7 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
@@ -308,65 +277,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ebebeb',
     paddingBottom: 10
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center'
-  },
   contentContainer: {
     paddingTop: 30
-  },
-
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-    marginVertical: 50
-  },
-
-  getStartedText: {
-    fontSize: 24,
-    color: '#000',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center'
-  },
-  logoText: {
-    fontSize: 20,
-    fontWeight: '600'
-  },
-  group: {
-    paddingTop: theme.SIZES.BASE * 3.75,
-  },
-  imageBlock: {
-    overflow: 'hidden',
-    borderRadius: 4,
-  },
-  rows: {
-    height: theme.SIZES.BASE * 2,
-  },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-  },
-  category: {
-    backgroundColor: theme.COLORS.WHITE,
-    marginVertical: theme.SIZES.BASE / 2,
-    borderWidth: 0,
-  },
-  categoryTitle: {
-    height: '100%',
-    paddingHorizontal: theme.SIZES.BASE,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   group: {
     paddingTop: theme.SIZES.BASE * 3.75,
@@ -381,76 +293,5 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: theme.SIZES.BASE,
     width: width - (theme.SIZES.BASE * 2),
-  },
-  optionsText: {
-    fontSize: theme.SIZES.BASE * 0.75,
-    color: '#4A4A4A',
-    fontWeight: "normal",
-    fontStyle: "normal",
-    letterSpacing: -0.29,
-  },
-  optionsButton: {
-    width: 'auto',
-    height: 34,
-    paddingHorizontal: theme.SIZES.BASE,
-    paddingVertical: 10,
-  },
-  input: {
-    borderBottomWidth: 1,
-  },
-  inputDefault: {
-    borderBottomColor: materialTheme.COLORS.PLACEHOLDER,
-  },
-  inputTheme: {
-    borderBottomColor: materialTheme.COLORS.PRIMARY,
-  },
-  inputTheme: {
-    borderBottomColor: materialTheme.COLORS.PRIMARY,
-  },
-  inputInfo: {
-    borderBottomColor: materialTheme.COLORS.INFO,
-  },
-  inputSuccess: {
-    borderBottomColor: materialTheme.COLORS.SUCCESS,
-  },
-  inputWarning: {
-    borderBottomColor: materialTheme.COLORS.WARNING,
-  },
-  inputDanger: {
-    borderBottomColor: materialTheme.COLORS.ERROR,
-  },
-  imageBlock: {
-    overflow: 'hidden',
-    borderRadius: 4,
-  },
-  rows: {
-    height: theme.SIZES.BASE * 2,
-  },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-  },
-  category: {
-    backgroundColor: theme.COLORS.WHITE,
-    marginVertical: theme.SIZES.BASE / 2,
-    borderWidth: 0,
-  },
-  categoryTitle: {
-    height: '100%',
-    paddingHorizontal: theme.SIZES.BASE,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  albumThumb: {
-    borderRadius: 4,
-    marginVertical: 4,
-    alignSelf: 'center',
-    width: thumbMeasure,
-    height: thumbMeasure
-  },
-  components: {
-  },
+  }
 });
