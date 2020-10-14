@@ -106,15 +106,7 @@ class Profile extends Component {
     }
 
     return (
-
-      <View
-        style={{
-          marginTop: 20,
-          width: 250,
-          borderRadius: 3,
-          elevation: 2
-        }}
-      >
+      <>
         {!googleResponse && (
           <>
             <Button
@@ -123,23 +115,13 @@ class Profile extends Component {
               color={materialTheme.COLORS.BUTTON_COLOR}
             >
               Analyze!
-        </Button>
-            <View
-              style={{
-                borderTopRightRadius: 3,
-                borderTopLeftRadius: 3,
-                shadowColor: 'rgba(0,0,0,1)',
-                shadowOpacity: 0.2,
-                shadowOffset: { width: 4, height: 4 },
-                shadowRadius: 5,
-                overflow: 'hidden'
-              }}
-            >
-              <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
-            </View>
+            </Button>
+
+            <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+
           </>
         )}
-      </View>
+      </>
     );
   };
 
@@ -267,30 +249,37 @@ class Profile extends Component {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
+
+          {!image && (
+            <>
+              <View style={{ margin: 20 }}>
+                {/* refatorar nomes com imagem */}
+                <Button
+                  style={[styles.button, styles.shadow]}
+                  color={materialTheme.COLORS.BUTTON_COLOR}
+                  onPress={this._pickImage}>
+                  galeria
+                </Button>
+              </View>
+
+              <View style={{ margin: 20 }}>
+                <Button
+                  style={[styles.button, styles.shadow]}
+                  onPress={this._takePhoto}
+                  color={materialTheme.COLORS.BUTTON_COLOR}
+                >
+                  foto
+                </Button>
+              </View>
+
+
+            </>
+          )}
+
           <View style={{ margin: 20 }}>
-
-            {/* refatorar nomes com imagem */}
-            <Button
-              style={[styles.button, styles.shadow]}
-              color={materialTheme.COLORS.BUTTON_COLOR}
-              onPress={this._pickImage}>
-              galeria
-            </Button>
-
+            {this._maybeRenderImageToAnalyze()}
+            {this._maybeRenderUploadingOverlay()}
           </View>
-          <View style={{ margin: 20 }}>
-            <Button
-              style={[styles.button, styles.shadow]}
-              onPress={this._takePhoto}
-              color={materialTheme.COLORS.BUTTON_COLOR}
-            >
-              foto
-            </Button>
-          </View>
-
-          {this._maybeRenderImageToAnalyze()}
-          {this._maybeRenderUploadingOverlay()}
-
 
           {product && (
             <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
