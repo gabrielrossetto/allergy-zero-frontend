@@ -1,26 +1,27 @@
-const Onboarding = 'https://images.unsplash.com/photo-1505995433366-e12047f3f144?fit=crop&w=840&q=80';
-const Pro = 'https://images.unsplash.com/photo-1485796826113-174aa68fd81b?fit=crop&w=840&q=80';
-const Products = {
-  'Accessories': 'https://source.unsplash.com//l1MCA0VyNrk/840x840',
-};
-
-const Profile = 'https://images.unsplash.com/photo-1512529920731-e8abaea917a5?fit=crop&w=840&q=80';
-const Avatar = 'https://images.unsplash.com/photo-1518725522904-4b3939358342?fit=crop&w=210&q=80';
-
-const Viewed = [
-  'https://images.unsplash.com/photo-1508264443919-15a31e1d9c1a?fit=crop&w=240&q=80',
-  'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?fit=crop&w=240&q=80',
-  'https://images.unsplash.com/photo-1487376480913-24046456a727?fit=crop&w=240&q=80',
-  'https://images.unsplash.com/photo-1494894194458-0174142560c0?fit=crop&w=240&q=80',
-  'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?fit=crop&w=240&q=80',
-  'https://images.unsplash.com/photo-1542068829-1115f7259450?fit=crop&w=240&q=80',
-];
+const Vegans = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fvegans.png?alt=media&token=7c066e75-5602-44bb-a2c9-51d02325c8f0';
+const Vegetarians = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fvegetarians.png?alt=media&token=70ce7b45-fa60-4660-9bcb-c0f70727b061';
+const Beef = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fbeef.png?alt=media&token=333c8051-c483-4ac6-b93b-bd52d2009f81';
+const PigMeat = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2FpigMeat.png?alt=media&token=49db5394-9c0e-4cd5-ac41-ae2994c7b953';
+const Fish = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Ffish.png?alt=media&token=dadbeba7-8f4f-4ad9-83e5-abb3a67eebcd';
+const Chicken = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fchicken.png?alt=media&token=7f681b67-33b7-44f0-8b4b-888b2c1125a3';
+const Egg = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fegg.png?alt=media&token=8c27cc69-8437-4b4a-97f9-dc2416fbaa27';
+const Caffeine = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fcaffeine.png?alt=media&token=da2f3ab7-302b-4148-8594-6ae3fe531ec1';
+const Gluten = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fgluten.png?alt=media&token=dc906b38-b21f-43ac-a4e9-41a2431c66b5';
+const Lactose = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Flactose.png?alt=media&token=491e198f-b3c2-4dd7-9312-38a3ec1c20b1';
+const Peanut = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fpeanut.png?alt=media&token=367b095b-d83b-4ca1-9c73-3f0e24129a61';
+const Soy = 'https://firebasestorage.googleapis.com/v0/b/allergy-zero.appspot.com/o/images%2Fsoy.png?alt=media&token=7e45c29b-3952-4aac-ac02-422fd44019b5';
 
 export default {
-  Onboarding,
-  Pro,
-  Products,
-  Profile,
-  Viewed,
-  Avatar,
+  Vegans,
+  Vegetarians,
+  Beef,
+  PigMeat,
+  Fish,
+  Chicken,
+  Egg,
+  Caffeine,
+  Gluten,
+  Lactose,
+  Peanut,
+  Soy,
 }

@@ -12,7 +12,7 @@ import {
 import { Button, Text, theme, Block } from 'galio-framework';
 
 import { Product } from '../components/';
-import { materialTheme, products } from '../constants/';
+import { materialTheme, Images } from '../constants/';
 
 const { width } = Dimensions.get('screen');
 
@@ -261,7 +261,7 @@ class Home extends Component {
             <Block flex style={styles.group}>
               <Block flex>
                 <Block flex row>
-                  <Product product={products[0].image} style={{ margin: 5 }} />
+                  <Product product={Images.Vegans} style={{ margin: 5 }} />
                 </Block>
               </Block>
             </Block>
@@ -274,7 +274,7 @@ class Home extends Component {
             <Block flex style={styles.group}>
               <Block flex>
                 <Block flex row>
-                  <Product product={products[1].image} style={{ margin: 5 }} />
+                  <Product product={Images.Vegetarians} style={{ margin: 5 }} />
                 </Block>
               </Block>
             </Block>
@@ -288,8 +288,8 @@ class Home extends Component {
             <Block flex style={styles.group}>
               <Block flex>
                 <Block flex row>
-                  <Product product={products[0].image} style={{ margin: 5 }} />
-                  <Product product={products[1].image} style={{ margin: 5 }} />
+                  <Product product={Images.Vegans} style={{ margin: 5 }} />
+                  <Product product={Images.Vegetarians} style={{ margin: 5 }} />
                 </Block>
               </Block>
             </Block>
@@ -309,24 +309,24 @@ class Home extends Component {
           <Block flex style={styles.group}>
             <Block flex>
               <Block flex row>
-                {product.isBeefContaining && (<Product product={products[2].image} style={{ margin: 5 }} />)}
-                {product.isPigMeatContaining && (<Product product={products[3].image} style={{ margin: 5 }} />)}
+                {product.isBeefContaining && (<Product product={Images.Beef} style={{ margin: 5 }} />)}
+                {product.isPigMeatContaining && (<Product product={Images.PigMeat} style={{ margin: 5 }} />)}
               </Block>
               <Block flex row>
-                {product.isFishfContaining && (<Product product={products[4].image} style={{ margin: 5 }} />)}
-                {product.isChickenContaining && (<Product product={products[5].image} style={{ margin: 5 }} />)}
+                {product.isFishfContaining && (<Product product={Images.Fish} style={{ margin: 5 }} />)}
+                {product.isChickenContaining && (<Product product={Images.Chicken} style={{ margin: 5 }} />)}
               </Block>
               <Block flex row>
-                {product.isEggContaining && (<Product product={products[6].image} style={{ margin: 5 }} />)}
-                {product.isCaffeineContaining && (<Product product={products[7].image} style={{ margin: 5 }} />)}
+                {product.isEggContaining && (<Product product={Images.Egg} style={{ margin: 5 }} />)}
+                {product.isCaffeineContaining && (<Product product={Images.Caffeine} style={{ margin: 5 }} />)}
               </Block>
               <Block flex row>
-                {product.isGlutenContaining && (<Product product={products[8].image} style={{ margin: 5 }} />)}
-                {product.isLactoseContaining && (<Product product={products[9].image} style={{ margin: 5 }} />)}
+                {product.isGlutenContaining && (<Product product={Images.Gluten} style={{ margin: 5 }} />)}
+                {product.isLactoseContaining && (<Product product={Images.Lactose} style={{ margin: 5 }} />)}
               </Block>
               <Block flex row>
-                {product.isPeanutContaining && (<Product product={products[10].image} style={{ margin: 5 }} />)}
-                {product.isSoyContaining && (<Product product={products[11].image} style={{ margin: 5 }} />)}
+                {product.isPeanutContaining && (<Product product={Images.Peanut} style={{ margin: 5 }} />)}
+                {product.isSoyContaining && (<Product product={Images.Soy} style={{ margin: 5 }} />)}
               </Block>
             </Block>
           </Block>
