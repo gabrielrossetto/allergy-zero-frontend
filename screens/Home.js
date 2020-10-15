@@ -375,6 +375,23 @@ class Home extends Component {
     }
   };
 
+  _maybeRenderNewAnalyze = () => {
+    let { product } = this.state;
+
+    if (product) {
+      return (
+        <>
+          <Button
+            style={[styles.button, styles.shadow]}
+            color={materialTheme.COLORS.BUTTON_COLOR}
+            onPress={this._tryAgain}>
+            Analisar outro produto
+          </Button>
+        </>
+      );
+    }
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -397,6 +414,8 @@ class Home extends Component {
             {this._maybeRenderProductError()}
 
             {this._maybeRenderUploadingOverlay()}
+
+            {this._maybeRenderNewAnalyze()}
           </View>
         </ScrollView>
       </View >
