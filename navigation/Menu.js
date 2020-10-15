@@ -4,8 +4,6 @@ import { Block, theme } from "galio-framework";
 import { useSafeArea } from "react-native-safe-area-context";
 
 import { Drawer as DrawerCustomItem } from '../components/';
-import { materialTheme } from "../constants/";
-
 
 function CustomDrawerContent({
   drawerPosition,
