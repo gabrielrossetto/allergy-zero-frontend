@@ -6,15 +6,13 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  Share,
-  Clipboard,
   Dimensions,
 } from 'react-native';
 
 import { Button, Text, theme, Block } from 'galio-framework';
 
 import { Product } from '../components/';
-import { materialTheme } from '../constants/';
+import { materialTheme, products } from '../constants/';
 
 const { width } = Dimensions.get('screen');
 
@@ -185,7 +183,7 @@ class Home extends Component {
     } else {
       this.setState({ productFoundError: true });
     }
-  }
+  };
 
   _tryAgain = async () => {
     this.setState({
@@ -195,59 +193,193 @@ class Home extends Component {
       product: null,
       productFoundError: false
     })
-  }
+  };
+
+  _maybeRenderCameraAndGalery = () => {
+    let { image } = this.state;
+
+    if (!image) {
+      return (
+        <>
+          <View style={{ margin: 15 }}>
+            <Button
+              style={[styles.button, styles.shadow]}
+              onPress={this._takePhoto}
+              color={materialTheme.COLORS.BUTTON_COLOR}
+            >
+              Abrir câmera
+              </Button>
+          </View>
+
+          <View style={{ margin: 15 }}>
+            <Button
+              style={[styles.button, styles.shadow]}
+              color={materialTheme.COLORS.BUTTON_COLOR}
+              onPress={this._pickImage}>
+              Carregar foto da galeria
+              </Button>
+          </View>
+        </>
+      );
+    }
+  };
+
+  _maybeRenderAnalyze = () => {
+    let { googleResponse, productFoundError, image } = this.state;
+
+    if (!googleResponse && !productFoundError && image) {
+      return (
+        <>
+          <Button
+            style={[styles.button, styles.shadow]}
+            onPress={this._submitToGoogle}
+            color={materialTheme.COLORS.BUTTON_COLOR}
+          >
+            Analyze!
+                </Button>
+        </>
+      );
+    }
+  };
+
+  _maybeRenderProductText = () => {
+    let { product } = this.state;
+
+    if (product) {
+      return (
+        <>
+          <Text bold size={16} style={styles.title}>Produto escolhido: {product.description}</Text>
+        </>
+      );
+    }
+  };
+
+  _maybeRenderProductImage = () => {
+    let { image, productFoundError } = this.state;
+
+    if (image && !productFoundError) {
+      return (
+        <Block flex style={styles.group}>
+          <Block flex>
+            <Block>
+              <Product product={image} full />
+            </Block>
+          </Block>
+        </Block>
+      );
+    }
+  };
+
+  _maybeRenderProductRecomendation = () => {
+    let { product } = this.state;
+
+    if (product) {
+      if (product.isAllowedToVegans && !product.isAllowedToVegetarians) {
+        //vegans
+        return (
+          <>
+            <Text bold size={16} style={styles.title}>Este produto é recomendado para: </Text>
+            <Block flex style={styles.group}>
+              <Block flex>
+                <Block flex row>
+                  <Product product={products[0].image} style={{ margin: 5 }} />
+                </Block>
+              </Block>
+            </Block>
+          </>
+        );
+      } else if (!product.isAllowedToVegans && product.isAllowedToVegetarians) {
+        //vegetarians
+        return (
+          <>
+            <Text bold size={16} style={styles.title}>Este produto é recomendado para: </Text>
+            <Block flex style={styles.group}>
+              <Block flex>
+                <Block flex row>
+                  <Product product={products[1].image} style={{ margin: 5 }} />
+                </Block>
+              </Block>
+            </Block>
+          </>
+        );
+
+      } else if (product.isAllowedToVegans && product.isAllowedToVegetarians) {
+        //both
+        return (
+          <>
+            <Text bold size={16} style={styles.title}>Este produto é recomendado para: </Text>
+            <Block flex style={styles.group}>
+              <Block flex>
+                <Block flex row>
+                  <Product product={products[0].image} style={{ margin: 5 }} />
+                  <Product product={products[1].image} style={{ margin: 5 }} />
+                </Block>
+              </Block>
+            </Block>
+          </>
+        );
+      }
+    }
+  };
+
+  _maybeRenderProductContained = () => {
+    let { product } = this.state;
+
+    if (product) {
+      //both
+      return (
+        <View style={{ margin: 15 }}>
+          <Text bold size={16} style={styles.title}>Este produto contém: </Text>
+          <Block flex style={styles.group}>
+            <Block flex>
+              <Block flex row>
+                {product.isBeefContaining && (<Product product={products[2].image} style={{ margin: 5 }} />)}
+                {product.isPigMeatContaining && (<Product product={products[3].image} style={{ margin: 5 }} />)}
+              </Block>
+              <Block flex row>
+                {product.isFishfContaining && (<Product product={products[4].image} style={{ margin: 5 }} />)}
+                {product.isChickenContaining && (<Product product={products[5].image} style={{ margin: 5 }} />)}
+              </Block>
+              <Block flex row>
+                {product.isEggContaining && (<Product product={products[6].image} style={{ margin: 5 }} />)}
+                {product.isCaffeineContaining && (<Product product={products[7].image} style={{ margin: 5 }} />)}
+              </Block>
+              <Block flex row>
+                {product.isGlutenContaining && (<Product product={products[8].image} style={{ margin: 5 }} />)}
+                {product.isLactoseContaining && (<Product product={products[9].image} style={{ margin: 5 }} />)}
+              </Block>
+              <Block flex row>
+                {product.isPeanutContaining && (<Product product={products[10].image} style={{ margin: 5 }} />)}
+                {product.isSoyContaining && (<Product product={products[11].image} style={{ margin: 5 }} />)}
+              </Block>
+            </Block>
+          </Block>
+        </View >
+      );
+    }
+  };
 
   render() {
-    let { image, product, googleResponse, productFoundError } = this.state;
+    let { productFoundError } = this.state;
 
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
 
-          {!image && (
-            <>
-              <View style={{ margin: 20 }}>
-                <Button
-                  style={[styles.button, styles.shadow]}
-                  onPress={this._takePhoto}
-                  color={materialTheme.COLORS.BUTTON_COLOR}
-                >
-                  Abrir câmera
-                </Button>
-              </View>
+          {this._maybeRenderCameraAndGalery()}
 
-              <View style={{ margin: 20 }}>
-                <Button
-                  style={[styles.button, styles.shadow]}
-                  color={materialTheme.COLORS.BUTTON_COLOR}
-                  onPress={this._pickImage}>
-                  Carregar foto da galeria
-                </Button>
-              </View>
-            </>
-          )}
+          <View style={{ margin: 15 }}>
 
-          <View style={{ margin: 20 }}>
-            {!googleResponse && !productFoundError && image && (
-              <>
-                <Button
-                  style={[styles.button, styles.shadow]}
-                  onPress={this._submitToGoogle}
-                  color={materialTheme.COLORS.BUTTON_COLOR}
-                >
-                  Analyze!
-                </Button>
-              </>
-            )}
-            {image && !productFoundError && (
-              <Block flex style={styles.group}>
-                <Block flex>
-                  <Block>
-                    <Product product={image} full />
-                  </Block>
-                </Block>
-              </Block>
-            )}
+            {this._maybeRenderAnalyze()}
+
+            {this._maybeRenderProductText()}
+
+            {this._maybeRenderProductImage()}
+
+            {this._maybeRenderProductRecomendation()}
+
+            {this._maybeRenderProductContained()}
+
             {productFoundError && (
               <>
                 <Text bold size={16} style={styles.title}>Erro ao analisar a imagem</Text>
@@ -264,7 +396,7 @@ class Home extends Component {
           </View>
 
         </ScrollView>
-      </View>
+      </View >
     );
   }
 }
@@ -293,5 +425,9 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: theme.SIZES.BASE,
     width: width - (theme.SIZES.BASE * 2),
+  },
+  title: {
+    paddingVertical: theme.SIZES.BASE,
+    paddingHorizontal: theme.SIZES.BASE * 2,
   }
 });
