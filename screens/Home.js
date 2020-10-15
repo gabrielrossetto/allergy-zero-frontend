@@ -45,7 +45,7 @@ async function uploadImageAsync(uri) {
   blob.close();
 
   return await snapshot.ref.getDownloadURL();
-}
+};
 
 class Home extends Component {
   state = {
@@ -59,26 +59,6 @@ class Home extends Component {
   async componentDidMount() {
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
     await Permissions.askAsync(Permissions.CAMERA);
-  }
-
-  _maybeRenderUploadingOverlay = () => {
-    // refactor
-    if (this.state.uploading) {
-      return (
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor: 'rgba(255,255,255,0.4)',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }
-          ]}
-        >
-          <ActivityIndicator color="#fff" animating size="large" />
-        </View>
-      );
-    }
   };
 
   _takePhoto = async () => {
@@ -208,7 +188,7 @@ class Home extends Component {
               color={materialTheme.COLORS.BUTTON_COLOR}
             >
               Abrir câmera
-              </Button>
+            </Button>
           </View>
 
           <View style={{ margin: 15 }}>
@@ -217,7 +197,7 @@ class Home extends Component {
               color={materialTheme.COLORS.BUTTON_COLOR}
               onPress={this._pickImage}>
               Carregar foto da galeria
-              </Button>
+            </Button>
           </View>
         </>
       );
@@ -225,9 +205,9 @@ class Home extends Component {
   };
 
   _maybeRenderAnalyze = () => {
-    let { googleResponse, productFoundError, image } = this.state;
+    let { uploading, googleResponse, productFoundError, image } = this.state;
 
-    if (!googleResponse && !productFoundError && image) {
+    if (!uploading && !googleResponse && !productFoundError && image) {
       return (
         <>
           <Button
@@ -235,8 +215,8 @@ class Home extends Component {
             onPress={this._submitToGoogle}
             color={materialTheme.COLORS.BUTTON_COLOR}
           >
-            Analyze!
-                </Button>
+            Analisar
+          </Button>
         </>
       );
     }
@@ -255,9 +235,9 @@ class Home extends Component {
   };
 
   _maybeRenderProductImage = () => {
-    let { image, productFoundError } = this.state;
+    let { uploading, image, productFoundError } = this.state;
 
-    if (image && !productFoundError) {
+    if (!uploading && image && !productFoundError) {
       return (
         <Block flex style={styles.group}>
           <Block flex>
@@ -275,10 +255,9 @@ class Home extends Component {
 
     if (product) {
       if (product.isAllowedToVegans && !product.isAllowedToVegetarians) {
-        //vegans
         return (
           <>
-            <Text bold size={16} style={styles.title}>Este produto é recomendado para: </Text>
+            <Text bold size={16} style={styles.title}>Este produto é recomendado para pessoas: </Text>
             <Block flex style={styles.group}>
               <Block flex>
                 <Block flex row>
@@ -289,10 +268,9 @@ class Home extends Component {
           </>
         );
       } else if (!product.isAllowedToVegans && product.isAllowedToVegetarians) {
-        //vegetarians
         return (
           <>
-            <Text bold size={16} style={styles.title}>Este produto é recomendado para: </Text>
+            <Text bold size={16} style={styles.title}>Este produto é recomendado para pessoas: </Text>
             <Block flex style={styles.group}>
               <Block flex>
                 <Block flex row>
@@ -304,10 +282,9 @@ class Home extends Component {
         );
 
       } else if (product.isAllowedToVegans && product.isAllowedToVegetarians) {
-        //both
         return (
           <>
-            <Text bold size={16} style={styles.title}>Este produto é recomendado para: </Text>
+            <Text bold size={16} style={styles.title}>Este produto é recomendado para pessoas: </Text>
             <Block flex style={styles.group}>
               <Block flex>
                 <Block flex row>
@@ -326,7 +303,6 @@ class Home extends Component {
     let { product } = this.state;
 
     if (product) {
-      //both
       return (
         <View style={{ margin: 15 }}>
           <Text bold size={16} style={styles.title}>Este produto contém: </Text>
@@ -359,9 +335,47 @@ class Home extends Component {
     }
   };
 
-  render() {
+  _maybeRenderProductError = () => {
     let { productFoundError } = this.state;
 
+    if (productFoundError) {
+      return (
+        <>
+          <Text bold size={16} style={styles.title}>Erro ao analisar a imagem</Text>
+          <Button
+            style={[styles.button, styles.shadow]}
+            color={materialTheme.COLORS.BUTTON_COLOR}
+            onPress={this._tryAgain}>
+            Tente novamente
+          </Button>
+        </>
+      );
+    }
+  };
+
+
+  _maybeRenderUploadingOverlay = () => {
+    let { uploading } = this.state;
+
+    if (uploading) {
+      return (
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            {
+              backgroundColor: 'rgba(255,255,255,0.4)',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }
+          ]}
+        >
+          <ActivityIndicator color={materialTheme.COLORS.PRIMARY} animating size="large" />
+        </View>
+      );
+    }
+  };
+
+  render() {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -380,21 +394,10 @@ class Home extends Component {
 
             {this._maybeRenderProductContained()}
 
-            {productFoundError && (
-              <>
-                <Text bold size={16} style={styles.title}>Erro ao analisar a imagem</Text>
+            {this._maybeRenderProductError()}
 
-                <Button
-                  style={[styles.button, styles.shadow]}
-                  color={materialTheme.COLORS.BUTTON_COLOR}
-                  onPress={this._tryAgain}>
-                  Tente novamente
-                </Button>
-              </>
-            )}
-            {/* {this._maybeRenderUploadingOverlay()} */}
+            {this._maybeRenderUploadingOverlay()}
           </View>
-
         </ScrollView>
       </View >
     );
