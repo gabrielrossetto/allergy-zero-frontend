@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "rn-material-kit-free",
-    "description": "React Native - Material Kit Free",
-    "slug": "rn-material-kit-free",
+    "name": "allergy-zero",
+    "description": "Allergy Zero",
+    "slug": "allergy-zero",
     "privacy": "unlisted",
     "sdkVersion": "37.0.0",
     "platforms": [
@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#6C24AA"
+      "backgroundColor": "#40a798"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,13 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.allergyzero",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.yourcompany.allergyzero",
+      "versionCode": 1
     }
   }
 }

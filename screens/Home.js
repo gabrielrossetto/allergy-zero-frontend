@@ -146,7 +146,7 @@ class Home extends Component {
 
   _getProduct = async (products) => {
     let { googleResponse } = this.state;
-    let found = products.docs.find(currentDb => googleResponse.responses[0].logoAnnotations[0].description.toUpperCase() === currentDb.data().description.toUpperCase())
+    let found = products.docs.find(currentDb => googleResponse.responses[0].logoAnnotations[0].description.toUpperCase().includes(currentDb.data().description.toUpperCase()))
 
     if (found) {
       return found.data();
